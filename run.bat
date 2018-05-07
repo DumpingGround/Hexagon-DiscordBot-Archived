@@ -1,5 +1,5 @@
 @echo off
-title Hexagonal
+title Hexagon - Bot
 nodemon bot.js
 echo Process Cancelled
 pause>nul
