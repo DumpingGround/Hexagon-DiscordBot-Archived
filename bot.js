@@ -61,11 +61,31 @@ client.on('message', async msg => {
     msg.channel.send(embeded);
   }
 
+  if (commandIs('setgame', msg)) {
+    if (msg.author.id == 189400912333111297) {
+      args.shift();
+      var words = args.join(" ");
+      console.log("Changing game to `" + words + " | Hexagon | madeby.hexdev.xyz/hexagon`");
+      client.user.setGame(words + " | Hexagon | madeby.hexdev.xyz/hexagon");
+      console.log("Successfully Completed changing game");
+      msg.react("👍");
+    }
+  }
+
+  if (commandIs('setstatus', msg)) {
+    if (msg.author.id == 189400912333111297) {
+      console.log("Changing status to" + args[1])
+      client.user.setStatus(args[1]);
+      console.log("Successfully Completed changing status");
+      msg.react("👍");
+    }
+  }
+
   if (commandIs('stats', msg)) {
     var embeded = new Discord.RichEmbed()
             .setAuthor("Hexagon Stats", "https://tropical-wrist.000webhostapp.com/Hexagonal.png")
             .setTitle("")
-            .addField("Bot Stats", ':bust_in_silhouette: **Users** ' + client.users.size + '\n:busts_in_silhouette: **Channels** ' + client.channels.size + '\n:house: **Servers** ' + client.guilds.size + '\n:calling: **Node.js Version** ' + process.version + '\n:gear: **Memory Usage** ' + '`Removed due to weirdass numbers showing up.`' + '\n:stopwatch: **Uptime** ' + formatSecs(Math.floor(client.uptime/1000)) + ' (Days:Hours:Mins:Secs)')
+            .addField("Bot Stats",)
             .setFooter("Requested from " + msg.author.username);
     msg.channel.send(embeded);
   }
@@ -156,7 +176,7 @@ client.on('message', async msg => {
   }
 
   if (commandIs('sendnudes', msg)) { // h/sendnudes
-    const m = await msg.channel.send("Uploading Image. Please wait..");
+    const m = await msg.channel.send("<a:loading:443159878815711232>");
     console.log("Uploading Image now.");
     var nudepics = new Discord.Attachment("MineDev.png", "minedev.png");
     await msg.channel.send(nudepics);
@@ -184,7 +204,7 @@ client.on('message', async msg => {
       var words = args.join("");
      if (words !== null) {
        await msg.channel.startTyping();
-       setTimeout(function(){ try {eval(words);} catch(e) {console.error(e)} }, 100);
+       await setTimeout(function(){ try {eval(words);} catch(e) {console.error(e)} }, 100);
        msg.channel.stopTyping();
        msg.react("👍");
       }
