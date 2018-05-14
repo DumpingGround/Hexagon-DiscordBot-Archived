@@ -85,7 +85,7 @@ client.on('message', async msg => {
     var embeded = new Discord.RichEmbed()
             .setAuthor("Hexagon Stats", "https://tropical-wrist.000webhostapp.com/Hexagonal.png")
             .setTitle("")
-            .addField("Bot Stats",)
+            .addField("Bot Stats", "")
             .setFooter("Requested from " + msg.author.username);
     msg.channel.send(embeded);
   }
@@ -155,13 +155,13 @@ client.on('message', async msg => {
 
   if (commandIs('vote', msg)) { // h/vote <question>
     args.shift();
-    var words = args.join("");
+    var words = args.join(" ");
     if (words !== null) {
      var embeded = new Discord.RichEmbed()
       .setAuthor(msg.author.username, msg.author.avatarURL)
       .setTitle("")
       .addField("Question from " + msg.author.username, words)
-      .setFooter("Requested from " + msg.author.username);
+      .setFooter("Hexagon, A bot by HexDev#0001");
      var m = await msg.channel.send(embeded);
      m.react("👍");
      m.react("👎");
@@ -204,7 +204,7 @@ client.on('message', async msg => {
       var words = args.join("");
      if (words !== null) {
        await msg.channel.startTyping();
-       await setTimeout(function(){ try {eval(words);} catch(e) {console.error(e)} }, 100);
+       await setTimeout(function(){ try {eval(words);} catch(e) {console.error(e)} }, 500);
        msg.channel.stopTyping();
        msg.react("👍");
       }
