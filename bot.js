@@ -1,8 +1,18 @@
 const Discord = require("discord.js");
 const WebHooks = require("node-webhooks");
 const FS = require("fs");
+const Nexmo = require("nexmo");
 const client = new Discord.Client();
 const prefix = "h/"
+
+const options = {
+  debug: false,
+}
+
+const nexmo = new Nexmo({
+  apiKey: "69061ad7",
+  apiSecret: "MoHWv2fc8S8PXFh4"
+}, options);
 
 function commandIs(str, msg) {
     // Return Information + Accept Multiple Prefixes
@@ -90,6 +100,30 @@ client.on('message', async msg => {
     msg.channel.send(embeded);
   }
 
+  if(commandIs('text', msg)) {
+    if (msg.author.id = 189400912333111297) {
+      var number = args[1]
+      var err
+      var responseData
+      args.shift();
+      args.shift();
+      var words = args.join(" ");
+      nexmo.message.sendSms("12015358934", number, words, {type: "unicode"},(err, responseData) => {
+        if(err) {
+          console.log(err);
+          msg.channel.send("Oops. We had an error");
+        } else {
+          console.dir(responseData);
+          msg.channel.send("Your message was successfully sent.");
+        }
+      }
+    );
+    } else {
+      msg.channel.send("nop");
+    }
+  }
+
+
   if (commandIs('privacy', msg)) {
     var embeded = new Discord.RichEmbed()
             .setAuthor("Hexagon", "https://tropical-wrist.000webhostapp.com/Hexagonal.png")
@@ -125,22 +159,14 @@ client.on('message', async msg => {
 	  msg.channel.send("ID for **" + msg.author.username + "** is *"+ msg.author.id + "*");
   }
 
-  if (commandIs('join', msg)) { // h/join
-    var embeded = new Discord.RichEmbed()
-      .setAuthor("ERROR", "https://tropical-wrist.000webhostapp.com/Cross.png")
-      .setTitle("")
-      .addField("Oops?", "Music is currently not available, Sorry ;-;")
-      .setFooter("Error 401, Unauthorized. Access Denied due to invalid credentials.");
-    msg.channel.send(embeded);
-  }
-
-  if (commandIs('play', msg)) { // h/play
-    var embeded = new Discord.RichEmbed()
-      .setAuthor("ERROR", "https://tropical-wrist.000webhostapp.com/Cross.png")
-      .setTitle("")
-      .addField("Oops?", "Music is currently not available, Sorry ;-;")
-      .setFooter("Error 401, Unauthorized. Access Denied due to invalid credentials.");
-    msg.channel.send(embeded);
+  if (commandIs('join', msg)) {
+    if (msg.author.voiceChannel.joinable == false) {
+      msg.channel.send("Error whiles joining channel. Needs following perms: Join Voice Channel, Speak Voice Channel");
+    } else if (msg.author.voiceChannel.speakable == false) {
+      msg.channel.send("Error whiles joining channel. Needs following perms: Join Voice Channel, Speak Voice Channel");
+    } else {
+      msg.member.voiceChannel.join();
+    }
   }
 
 
