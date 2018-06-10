@@ -38,6 +38,10 @@ function formatSecs(seconds) {
     return result;
 }
 
+function CalcCost(costinput) {
+  
+}
+
 webHooks.add('discordtest', 'https://discordapp.com/api/webhooks/434856690643501068/TM0wGXX29MviIK-kajt18XpNhu22OqUCnmSBfYkDSJk1PZ9dBZy0LQ3wKBeDZN5has-9').then(function(){
 	// done
 }).catch(function(err){
@@ -123,6 +127,18 @@ client.on('message', async msg => {
     }
   }
 
+  if(commandIs('call', msg)) {
+    if (msg.author.id == 189400912333111297) {
+      var number = args[1]
+      var err
+      var responseData
+      nexmo.calls.create({
+        to: [{type: 'phone', number: number}],
+        from: {type: 'phone', number: '12015358934'},
+        answer_url: ''}, );
+  }
+}
+
 
   if (commandIs('privacy', msg)) {
     var embeded = new Discord.RichEmbed()
@@ -174,7 +190,7 @@ client.on('message', async msg => {
     var embeded = new Discord.RichEmbed()
       .setAuthor("Commands", "https://tropical-wrist.000webhostapp.com/Hexagonal.png")
       .setTitle("")
-      .addField("General", "**h/cmds** - This is what you're looking at right now.\n**h/vote <Question>** - Create a :thumbsup: or :thumbsdown: poll.")
+      .addField("General", "**h/cmds** - This is what you're looking at right now.\n**h/vote <Question>** - Create a :thumbsup: or :thumbsdown: poll.\n**h/yesno <Question>** - Create a ")
       .setFooter("Requested by " + msg.author.username);
     msg.channel.send(embeded);
   }
@@ -193,6 +209,23 @@ client.on('message', async msg => {
      m.react("👎");
     } else {
       msg.channel.send("Error: Put a question.")
+    }
+  }
+
+  if (commandIs('yesno', msg)) {
+    args.shift();
+    var words = args.join(" ");
+    if (words !== null) {
+      var embeded = new Discord.RichEmbed()
+      .setAuthor(msg.author.username, msg.author.avatarURL)
+      .setTitle("")
+      .addField("Yes or no?", words)
+      .setFooter("Hexagon, A bot by HexDev#0001");
+     var m = await msg.channel.send(embeded);
+     await m.react("443164018937561111");
+     m.react("443164018924847116");
+    } else {
+      msg.channel.send("No questions for u boi? *(Error 404)*");
     }
   }
 
