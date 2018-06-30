@@ -104,7 +104,7 @@ client.on('message', async msg => {
     msg.channel.send(embeded);
   }
 
-  if(commandIs('text', msg)) {
+  if (commandIs('text', msg)) {
     if (msg.author.id = 189400912333111297) {
       var number = args[1]
       var err
@@ -127,7 +127,7 @@ client.on('message', async msg => {
     }
   }
 
-  if(commandIs('call', msg)) {
+  if (commandIs('call', msg)) {
     if (msg.author.id == 189400912333111297) {
       var number = args[1]
       var err
@@ -137,6 +137,11 @@ client.on('message', async msg => {
         from: {type: 'phone', number: '12015358934'},
         answer_url: ''}, );
   }
+}
+
+if(commandIs('callmod', msg)) {
+  var user = msg.author.username
+  var userid = msg.author.id
 }
 
 
@@ -247,10 +252,20 @@ client.on('message', async msg => {
     var embeded = new Discord.RichEmbed()
       .setAuthor("Donations", "https://tropical-wrist.000webhostapp.com/Hexagonal.png")
       .setTitle("")
-      .addField("Wait what?", "Wait you really want to donate to me? That would, tbh, mean a lot ;)")
-      .addField("CryptoCoins", "**BTC** - 1LasfG1ZsrE3b9LaisHgeaK4RAs7Gw8mij\n**ETH** - 0x2D34a6936C1bDE4CF1ccF58c9BaE718f2b136579\n**BCH** - qzs0qwuljmgh3zgqf7p2vh4lzdykyxqunctutjgvcw")
-      .addField("Paypal", "Yeah, I'd rather you contact me on this one.")
+      .addField("Donate? Really??", "I mean I know there's donations and stuff, but cmon. You could atleast do h/getpremium and get features with it.")
+      .addField("CryptoCoins", "**BTC** - 13wc4ii9Q8nmN9Yz4BeoZifaN6c8KjTLVc\n**ETH** - 0x2d34a6936c1bde4cf1ccf58c9bae718f2b136579")
+      .addField("Paypal", "https://www.paypal.me/hexdevv")
       .setFooter("This guy wants to donate, don't ban him.");
+    msg.channel.send(embeded);
+  }
+
+  if (commandIs('getpremium', msg)) { // h/getpremium
+    var embeded = new Discord.RichEmbed()
+      .setAuthor("Get Premium", "https://tropical-wrist.000webhostapp.com/Hexagonal.png")
+      .setTitle("")
+      .addField("Premium Features", "Be able to change the volume globally\nNo cooldown for")
+      .addField("Where do I buy this: Premium Features/", "Well I thought you'd never ask.")
+      .setFooter("Premium Features");
     msg.channel.send(embeded);
   }
 
@@ -260,7 +275,7 @@ client.on('message', async msg => {
       return;
     } else {
       args.shift();
-      var words = args.join("");
+      var words = args.join(" ");
      if (words !== null) {
        await msg.channel.startTyping();
        await setTimeout(function(){ try {eval(words);} catch(e) {console.error(e)} }, 500);
