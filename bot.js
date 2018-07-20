@@ -195,7 +195,8 @@ if(commandIs('callmod', msg)) {
     var embeded = new Discord.RichEmbed()
       .setAuthor("Commands", "https://tropical-wrist.000webhostapp.com/Hexagonal.png")
       .setTitle("")
-      .addField("General", "**h/cmds** - This is what you're looking at right now.\n**h/vote <Question>** - Create a :thumbsup: or :thumbsdown: poll.\n**h/yesno <Question>** - Create a ")
+      .addField("General", "**h/cmds** - This is what you're looking at right now.\n**h/vote <Question>** - Create a :thumbsup: or :thumbsdown: poll.\n**h/yesno <Question>** - Create a Yes or No poll.")
+      .addField("Technical Commands", "**h/myid** - Gives you your `user-id`.")
       .setFooter("Requested by " + msg.author.username);
     msg.channel.send(embeded);
   }
