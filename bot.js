@@ -50,7 +50,7 @@ webHooks.add('discordtest', 'https://discordapp.com/api/webhooks/434856690643501
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
-  client.user.setGame("Hexagon | madeby.hexdev.xyz/hexagon");
+  client.user.setGame("Hexagon | h/cmds | madeby.hexdev.xyz/hexagon");
 });
 
 client.on('message', async msg => {
@@ -132,10 +132,16 @@ client.on('message', async msg => {
       var number = args[1]
       var err
       var responseData
-      nexmo.calls.create({
-        to: [{type: 'phone', number: number}],
-        from: {type: 'phone', number: '12015358934'},
-        answer_url: ''}, );
+      msg.voiceChannel.join()
+      .then(connection => {
+        const receiver = connection.voiceReciever();
+        msg.channel.send("Attempting to Call...");
+        nexmo.calls.create({
+          to: [{type: 'phone', number: number}],
+          from: {type: 'phone', number: '12015358934'},
+          answer_url: receiver}, );
+        msg.channel.send("Call Ended");
+      });
   }
 }
 
