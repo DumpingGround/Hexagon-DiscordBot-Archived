@@ -95,7 +95,7 @@ client.on('message', async msg => {
     }
   }
 
-  if (commandIs('play', msg)) {
+  if (commandIs('summon', msg)) {
     if (!msg.member.voiceChannel) {
       msg.channel.send("You're currently not in a channel");
       return;
@@ -108,7 +108,7 @@ client.on('message', async msg => {
       msg.channel.send("Can't speak in the Voice Channel you're in");
       return;
     }
-    msg.channel.send("it works");
+    message.member.voiceChannel.join();
   }
 
   if (commandIs('stats', msg)) {
