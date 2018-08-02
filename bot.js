@@ -108,7 +108,7 @@ client.on('message', async msg => {
       msg.channel.send("Can't speak in the Voice Channel you're in");
       return;
     }
-    message.member.voiceChannel.join();
+    msg.member.voiceChannel.join();
   }
 
   if (commandIs('stats', msg)) {
