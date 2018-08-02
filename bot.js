@@ -95,6 +95,21 @@ client.on('message', async msg => {
     }
   }
 
+  if (commandIs('play', msg)) {
+    if (!msg.member.voiceChannel) {
+      msg.channel.send("You're currently not in a channel");
+      return;
+    }
+    if (msg.member.voiceChannel.joinable != true) {
+      msg.channel.send("Can't join the Voice Channel you're in");
+      return;
+    }
+    if (msg.member.voiceChannel.speakable != true) {
+      msg.channel.send("Can't speak in the Voice Channel you're in");
+      return;
+    }
+  }
+
   if (commandIs('stats', msg)) {
     var embeded = new Discord.RichEmbed()
             .setAuthor("Hexagon Stats", "https://tropical-wrist.000webhostapp.com/Hexagonal.png")
@@ -127,25 +142,9 @@ client.on('message', async msg => {
     }
   }
 
-  if (commandIs('call', msg)) {
-    if (msg.author.id == 189400912333111297) {
-      var number = args[1]
-      var err
-      var responseData
-      msg.voiceChannel.join()
-      .then(connection => {
-        const receiver = connection.voiceReciever();
-        msg.channel.send("Attempting to Call...");
-        nexmo.calls.create({
-          to: [{type: 'phone', number: number}],
-          from: {type: 'phone', number: '12015358934'},
-          answer_url: receiver}, );
-        msg.channel.send("Call Ended");
-      });
-  }
-}
+  
 
-if(commandIs('callmod', msg)) {
+  if(commandIs('callmod', msg)) {
   var user = msg.author.username
   var userid = msg.author.id
 }
@@ -184,16 +183,6 @@ if(commandIs('callmod', msg)) {
 */
   if (commandIs('myid', msg)) {
 	  msg.channel.send("ID for **" + msg.author.username + "** is *"+ msg.author.id + "*");
-  }
-
-  if (commandIs('join', msg)) {
-    if (msg.author.voiceChannel.joinable == false) {
-      msg.channel.send("Error whiles joining channel. Needs following perms: Join Voice Channel, Speak Voice Channel");
-    } else if (msg.author.voiceChannel.speakable == false) {
-      msg.channel.send("Error whiles joining channel. Needs following perms: Join Voice Channel, Speak Voice Channel");
-    } else {
-      msg.member.voiceChannel.join();
-    }
   }
 
 
