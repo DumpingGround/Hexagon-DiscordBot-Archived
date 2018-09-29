@@ -4,10 +4,16 @@ const FS = require("fs");
 const Nexmo = require("nexmo");
 const client = new Discord.Client();
 const prefix = "h/"
+const ytsearch = require('youtube-search');
 
 const options = {
   debug: false,
 }
+
+var ytopts = {
+  maxResults: 1,
+  key: 'AIzaSyBpYR6knsFikarpJyTWr3wMLK_Fe6UfM60'
+};
 
 const nexmo = new Nexmo({
   apiKey: "69061ad7",
@@ -73,6 +79,16 @@ client.on('message', async msg => {
             .addField("Information", "Hexagon (Formerly known as Music4All) is a client which can do many things. It can moderate, play music, and do some fun commands.\n h/cmd to have a look at the commands.")
             .setFooter("Requested from " + msg.author.username);
     msg.channel.send(embeded);
+  }
+
+  if (commandIs('play', msg)) {
+    args.shift();
+    var words = args.join(" ");
+    ytsearch(words, ytopts, function(err, searchytdl) {
+      if(err) return console.log(err);
+      var ytvid = searchytdl.link
+      console.log(ytvid);
+    });
   }
 
   if (commandIs('setgame', msg)) {
