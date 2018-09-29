@@ -84,10 +84,17 @@ client.on('message', async msg => {
   if (commandIs('play', msg)) {
     args.shift();
     var words = args.join(" ");
+    console.log("Searching for video: " + words);
     ytsearch(words, ytopts, function(err, searchytdl) {
       if(err) return console.log(err);
+      if(!searchytdl[0]) {
+        console.log("Failed to find video");
+        msg.channel.send("Could not find the video you were looking for.");
+        return;
+      }
       var ytvid = searchytdl[0].link;
       console.log(ytvid);
+      console.log("Playing " + ytvid);
       msg.channel.send("Playing **" + searchytdl[0].title + "** Now.");
     });
   }
