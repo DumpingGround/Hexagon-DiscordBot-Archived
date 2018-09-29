@@ -86,8 +86,9 @@ client.on('message', async msg => {
     var words = args.join(" ");
     ytsearch(words, ytopts, function(err, searchytdl) {
       if(err) return console.log(err);
-      var ytvid = searchytdl.link
+      var ytvid = searchytdl[0].link;
       console.log(ytvid);
+      msg.channel.send("Playing **" + searchytdl[0].title + "** Now.");
     });
   }
 
