@@ -2,6 +2,7 @@ const Discord = require("discord.js");
 const WebHooks = require("node-webhooks");
 const FS = require("fs");
 const Nexmo = require("nexmo");
+const ytdl = require("ytdl-core");
 const client = new Discord.Client();
 const prefix = "h/"
 const ytsearch = require('youtube-search');
@@ -9,6 +10,8 @@ const ytsearch = require('youtube-search');
 const options = {
   debug: false,
 }
+
+const streamOptions = { seek: 0, volume: 1 };
 
 var ytopts = {
   maxResults: 1,
@@ -92,10 +95,14 @@ client.on('message', async msg => {
         msg.channel.send("Could not find the video you were looking for.");
         return;
       }
+      msg.member.voiceChannel.join().then(connection => {
       var ytvid = searchytdl[0].link;
       console.log(ytvid);
       console.log("Playing " + ytvid);
+      const stream = ytdl(ytvid,{filter : 'audioonly'});
+      const dispatcher = connection.playStream(stream, streamOptions);
       msg.channel.send("Playing **" + searchytdl[0].title + "** Now.");
+      });
     });
   }
 
