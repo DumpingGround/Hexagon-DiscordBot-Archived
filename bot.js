@@ -222,8 +222,9 @@ client.on('message', async msg => {
     var embeded = new Discord.RichEmbed()
       .setAuthor("Commands", "https://tropical-wrist.000webhostapp.com/Hexagonal.png")
       .setTitle("")
-      .addField("General", "**h/cmds** - This is what you're looking at right now.\n**h/vote <Question>** - Create a :thumbsup: or :thumbsdown: poll.\n**h/yesno <Question>** - Create a Yes or No poll.")
+      .addField("General", "**h/cmds** - This is what you're looking at right now.\n**h/vote <Question>** - Create a :thumbsup: or :thumbsdown: poll.")
       .addField("Technical Commands", "**h/myid** - Gives you your `user-id`.")
+      .addField("Music Commands", "**h/summon** - Makes the bot join your voice channel.\n**h/play <Link or Search>** - Plays a song.\n**h/pause** - Pauses song *[N/A ATM]*\n**h/leave** - Leaves the voice channel.")
       .setFooter("Requested by " + msg.author.username);
     msg.channel.send(embeded);
   }
@@ -245,23 +246,6 @@ client.on('message', async msg => {
     }
   }
 
-  if (commandIs('yesno', msg)) {
-    args.shift();
-    var words = args.join(" ");
-    if (words !== null) {
-      var embeded = new Discord.RichEmbed()
-      .setAuthor(msg.author.username, msg.author.avatarURL)
-      .setTitle("")
-      .addField("Yes or no?", words)
-      .setFooter("Hexagon, A bot by HexDev#0001");
-     var m = await msg.channel.send(embeded);
-     await m.react("443164018937561111");
-     m.react("443164018924847116");
-    } else {
-      msg.channel.send("No questions for u boi? *(Error 404)*");
-    }
-  }
-
   if (commandIs('invite', msg)) {
     msg.channel.send("I sent it to you :thumbsup:");
     msg.author.send("Wait you want to add this bot? OMG, thank you very much.\nJoin the Discord server to have the latest news on the updates: https://discord.gg/XbaqS\n\nhttps://discordapp.com/oauth2/authorize?client_id=389528187295498252&scope=bot&permissions=2146954487");
@@ -274,17 +258,6 @@ client.on('message', async msg => {
     await msg.channel.send(nudepics);
     m.delete();
     console.log("Image Uploaded");
-  }
-
-  if (commandIs('donations', msg)) { // h/donations
-    var embeded = new Discord.RichEmbed()
-      .setAuthor("Donations", "https://tropical-wrist.000webhostapp.com/Hexagonal.png")
-      .setTitle("")
-      .addField("Donate? Really??", "I mean I know there's donations and stuff, but cmon. You could atleast do h/getpremium and get features with it.")
-      .addField("CryptoCoins", "**BTC** - 13wc4ii9Q8nmN9Yz4BeoZifaN6c8KjTLVc\n**ETH** - 0x2d34a6936c1bde4cf1ccf58c9bae718f2b136579")
-      .addField("Paypal", "https://www.paypal.me/hexdevv")
-      .setFooter("This guy wants to donate, don't ban him.");
-    msg.channel.send(embeded);
   }
 
   if (commandIs('getpremium', msg)) { // h/getpremium
