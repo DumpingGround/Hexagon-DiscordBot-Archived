@@ -11,7 +11,7 @@ const options = {
   debug: false,
 }
 
-const streamOptions = { seek: 0, volume: 1 };
+const streamOptions = { seek: 0, volume: 0.5 };
 
 var ytopts = {
   maxResults: 1,
@@ -89,7 +89,10 @@ client.on('message', async msg => {
     var words = args.join(" ");
     console.log("Searching for video: " + words);
     ytsearch(words, ytopts, function(err, searchytdl) {
-      if(err) return console.log(err);
+      if(err) {
+        console.log(err);
+        msg.channel.send("There was an Error.");
+      }
       if(!searchytdl[0]) {
         console.log("Failed to find video");
         msg.channel.send("Could not find the video you were looking for.");
@@ -104,6 +107,10 @@ client.on('message', async msg => {
       msg.channel.send("Playing **" + searchytdl[0].title + "** Now.");
       });
     });
+  }
+
+  if (commandIs('leave', msg)) {
+    msg.member.voiceChannel.leave();
   }
 
   if (commandIs('setgame', msg)) {
@@ -249,15 +256,6 @@ client.on('message', async msg => {
   if (commandIs('invite', msg)) {
     msg.channel.send("I sent it to you :thumbsup:");
     msg.author.send("Wait you want to add this bot? OMG, thank you very much.\nJoin the Discord server to have the latest news on the updates: https://discord.gg/XbaqS\n\nhttps://discordapp.com/oauth2/authorize?client_id=389528187295498252&scope=bot&permissions=2146954487");
-  }
-
-  if (commandIs('sendnudes', msg)) { // h/sendnudes
-    const m = await msg.channel.send("<a:loading:443159878815711232>");
-    console.log("Uploading Image now.");
-    var nudepics = new Discord.Attachment("MineDev.png", "minedev.png");
-    await msg.channel.send(nudepics);
-    m.delete();
-    console.log("Image Uploaded");
   }
 
   if (commandIs('getpremium', msg)) { // h/getpremium
