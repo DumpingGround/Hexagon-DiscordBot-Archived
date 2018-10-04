@@ -109,8 +109,8 @@ client.on('message', async msg => {
       });
     });
   }
-/*
-  if (commandIs('play', msg)) {
+
+  if (commandIs('tempplay', msg)) {
     args.shift();
     var words = args.join(" ");
     console.log("Searching for video: " + words);
@@ -127,7 +127,7 @@ client.on('message', async msg => {
       if ()
     });
   }
-*/
+  
   if (commandIs('rolldice', msg)) {
     const m = await msg.channel.send("<:rolling:497532919804461067>");
     var _dice = Math.random();
