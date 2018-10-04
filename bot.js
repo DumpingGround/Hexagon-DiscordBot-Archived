@@ -97,7 +97,7 @@ client.on('message', async msg => {
         console.log("Failed to find video");
         msg.channel.send("Could not find the video you were looking for.");
         return;
-      }
+      } 
       msg.member.voiceChannel.join().then(connection => {
       var ytvid = searchytdl[0].link;
       console.log(ytvid);
@@ -111,6 +111,7 @@ client.on('message', async msg => {
 
   if (commandIs('leave', msg)) {
     msg.member.voiceChannel.leave();
+    msg.channel.send("Left");
   }
 
   if (commandIs('setgame', msg)) {
