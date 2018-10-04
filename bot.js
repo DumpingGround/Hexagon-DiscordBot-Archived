@@ -280,7 +280,7 @@ client.on('message', async msg => {
     var embeded = new Discord.RichEmbed()
       .setAuthor("Commands", "https://tropical-wrist.000webhostapp.com/Hexagonal.png")
       .setTitle("")
-      .addField("General", "**h/cmds** - This is what you're looking at right now.\n**h/vote <Question>** - Create a :thumbsup: or :thumbsdown: poll.")
+      .addField("General", "**h/cmds** - This is what you're looking at right now.\n**h/vote <Question>** - Create a :thumbsup: or :thumbsdown: poll.\n**h/rolldice** - Simply rolls a dice.")
       .addField("Technical Commands", "**h/myid** - Gives you your `user-id`.")
       .addField("Music Commands", "**h/summon** - Makes the bot join your voice channel.\n**h/play <Link or Search>** - Plays a song.\n**h/pause** - Pauses song *[N/A ATM]*\n**h/leave** - Leaves the voice channel.")
       .setFooter("Requested by " + msg.author.username);
