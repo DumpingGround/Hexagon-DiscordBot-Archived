@@ -6,6 +6,7 @@ const ytdl = require("ytdl-core");
 const client = new Discord.Client();
 const prefix = "h/"
 const ytsearch = require('youtube-search');
+var servqueue = []
 
 const options = {
   debug: false,
@@ -107,6 +108,56 @@ client.on('message', async msg => {
       msg.channel.send("Playing **" + searchytdl[0].title + "** Now.");
       });
     });
+  }
+/*
+  if (commandIs('play', msg)) {
+    args.shift();
+    var words = args.join(" ");
+    console.log("Searching for video: " + words);
+    ytsearch(words, ytopts, function(err, searchytdl) {
+      if(err) {
+        console.log(err);
+        msg.channel.send("There was an Error.");
+      }
+      if(!searchytdl[0]) {
+        console.log("Failed to find video");
+        msg.channel.send("Could not find the video you were looking for.");
+        return;
+      }
+      if ()
+    });
+  }
+*/
+  if (commandIs('rolldice', msg)) {
+    const m = await msg.channel.send("<:rolling:497532919804461067>");
+    var _dice = Math.random();
+    _dice = _dice * 5
+    _dice = Math.round(_dice);
+    if (_dice == 0) {
+      msg.channel.send("<:dice6:497532948388642816>");
+      m.delete();
+      return;
+    } else if (_dice == 1) {
+      msg.channel.send("<:dice1:497532942877196298>");
+      m.delete();
+      return;
+    } else if (_dice == 2) {
+      msg.channel.send("<:dice2:497532944030629915>");
+      m.delete();
+      return;
+    } else if (_dice == 3) {
+      msg.channel.send("<:dice3:497532944832004098>");
+      m.delete();
+      return;
+    } else if (_dice == 4) {
+      msg.channel.send("<:dice4:497532947528679424>");
+      m.delete();
+      return;
+    } else if (_dice == 5) {
+      msg.channel.send("<:dice5:497532947683868683>");
+      m.delete();
+      return;
+    }
   }
 
   if (commandIs('leave', msg)) {
