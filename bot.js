@@ -6,7 +6,7 @@ const ytdl = require("ytdl-core");
 const client = new Discord.Client();
 const prefix = "h/"
 const ytsearch = require('youtube-search');
-var servqueue = []
+var servqueue = {}
 
 const options = {
   debug: false,
@@ -48,8 +48,14 @@ function formatSecs(seconds) {
     return result;
 }
 
-function CalcCost(costinput) {
-  
+function playmusic(connection, msg) {
+  var queue = servqueue[msg.guild.id];
+  queue.dispatcher = connection.playStream(ytdl(queue.queue[0], {filter: "audioonly"}));
+  queue.queue.shift();
+  queue.dispatcher.on("end", function() {
+    if (queue.queue[0]) playmusic(connection, msg);
+    else connection.disconnect();
+  })
 }
 
 webHooks.add('discordtest', 'https://discordapp.com/api/webhooks/434856690643501068/TM0wGXX29MviIK-kajt18XpNhu22OqUCnmSBfYkDSJk1PZ9dBZy0LQ3wKBeDZN5has-9').then(function(){
@@ -110,7 +116,7 @@ client.on('message', async msg => {
     });
   }
 
-  if (commandIs('tempplay', msg)) {
+  if (commandIs('queue', msg)) {
     args.shift();
     var words = args.join(" ");
     console.log("Searching for video: " + words);
@@ -119,14 +125,18 @@ client.on('message', async msg => {
         console.log(err);
         msg.channel.send("There was an Error.");
       }
-      if(!searchytdl[0]) {
-        console.log("Failed to find video");
-        msg.channel.send("Could not find the video you were looking for.");
-        return;
-      }
-      if ()
+      const ytvid = searchytdl[0].link;
+      servqueue[msg.guild.id].queue.push(ytvid);
+      msg.channel.send("Queued **" + searchytdl[0].title + "**");
     });
   }
+
+  if (commandIs('start', msg)) {
+    msg.member.voiceChannel.join().then(connection => {
+    playmusic(connection, msg);
+    });
+  }
+
   
   if (commandIs('rolldice', msg)) {
     const m = await msg.channel.send("<:rolling:497532919804461067>");
