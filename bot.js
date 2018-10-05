@@ -49,8 +49,11 @@ function formatSecs(seconds) {
 }
 
 function playmusic(connection, msg) {
-  var queue = servqueue[msg.guild.id];
-  queue.dispatcher = connection.playStream(ytdl(queue.queue[0], {filter: "audioonly"}));
+  if(!servqueue[msg.guild.id].queue[0]) {
+    
+  }
+  const queue = servqueue[msg.guild.id];
+  queue.dispatcher = connection.playStream(ytdl(servqueue[msg.guild.id].queue[0], {filter: "audioonly"}));
   queue.queue.shift();
   queue.dispatcher.on("end", function() {
     if (queue.queue[0]) playmusic(connection, msg);
@@ -95,6 +98,7 @@ client.on('message', async msg => {
     args.shift();
     var words = args.join(" ");
     console.log("Searching for video: " + words);
+    var searchytdl;
     ytsearch(words, ytopts, function(err, searchytdl) {
       if(err) {
         console.log(err);
@@ -108,34 +112,35 @@ client.on('message', async msg => {
       msg.member.voiceChannel.join().then(connection => {
       var ytvid = searchytdl[0].link;
       console.log(ytvid);
+      if(!servqueue[msg.guild.id]) {servqueue[msg.guild.id] = {queue: []}}
+      servqueue[msg.guild.id].queue.push(ytvid);
+      if (servqueue[msg.guild.id].dispatcher) {
+        console.log("Queued " + ytvid);
+        msg.channel.send("Queued **" + searchytdl[0].title + "**");
+      } else {
       console.log("Playing " + ytvid);
-      const stream = ytdl(ytvid,{filter : 'audioonly'});
-      const dispatcher = connection.playStream(stream, streamOptions);
-      msg.channel.send("Playing **" + searchytdl[0].title + "** Now.");
+      playmusic(connection, msg);
+      msg.channel.send("Playing **" + searchytdl[0].title + "**");
+      }
       });
     });
   }
 
-  if (commandIs('queue', msg)) {
-    args.shift();
-    var words = args.join(" ");
-    console.log("Searching for video: " + words);
-    ytsearch(words, ytopts, function(err, searchytdl) {
-      console.dir(searchytdl[0]);
-      if(err) {
-        console.log(err);
-        msg.channel.send("There was an Error.");
-      }
-      if(!searchytdl[0]) {
-        console.log("Failed to find video");
-        msg.channel.send("Could not find the video you were looking for.");
-        return;
-      }
+  if (commandIs('skip', msg)) {
+    if (servqueue[msg.guild.id].dispatcher) {
+      servqueue[msg.guild.id].dispatcher.end();
+      msg.channel.send("Skipped!");
+    } else {
+      msg.channel.send("Nothing is being played here.");
+    }
+  }
+
+
+  /*
       const ytvid = searchytdl[0].link;
       servqueue[msg.guild.id].queue.push(ytvid);
       msg.channel.send("Queued **" + searchytdl[0].title + "**");
-    });
-  }
+  */
 
   if (commandIs('start', msg)) {
     msg.member.voiceChannel.join().then(connection => {
