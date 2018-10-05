@@ -121,9 +121,15 @@ client.on('message', async msg => {
     var words = args.join(" ");
     console.log("Searching for video: " + words);
     ytsearch(words, ytopts, function(err, searchytdl) {
+      console.dir(searchytdl[0]);
       if(err) {
         console.log(err);
         msg.channel.send("There was an Error.");
+      }
+      if(!searchytdl[0]) {
+        console.log("Failed to find video");
+        msg.channel.send("Could not find the video you were looking for.");
+        return;
       }
       const ytvid = searchytdl[0].link;
       servqueue[msg.guild.id].queue.push(ytvid);
