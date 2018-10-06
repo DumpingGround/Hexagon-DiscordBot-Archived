@@ -12,7 +12,7 @@ const options = {
   debug: false,
 }
 
-const streamOptions = { seek: 0, volume: 0.5 };
+const streamOptions = { seek: 0, volume: 0.5, filter: "audioonly" };
 
 var ytopts = {
   maxResults: 1,
@@ -53,7 +53,7 @@ function playmusic(connection, msg) {
     
   }
   const queue = servqueue[msg.guild.id];
-  queue.dispatcher = connection.playStream(ytdl(servqueue[msg.guild.id].queue[0], {filter: "audioonly"}));
+  queue.dispatcher = connection.playStream(ytdl(servqueue[msg.guild.id].queue[0], streamOptions));
   queue.queue.shift();
   queue.dispatcher.on("end", function() {
     if (queue.queue[0]) playmusic(connection, msg);
