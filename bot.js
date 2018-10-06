@@ -75,24 +75,11 @@ client.on('ready', () => {
 client.on('message', async msg => {
   var args = msg.content.split(/[ ]+/);
   var slasharg = msg.content.split("/");
+  
   if (commandIs('ping', msg)) {
       const m = await msg.channel.send(":ping_pong: Pinging...");
       m.edit(`:ping_pong: **Bot** ${m.createdTimestamp - msg.createdTimestamp}ms | **API** ${Math.round(client.ping)}ms`);
     }
-
-  if (commandIs('info', msg)) {
-    msg.channel.send("Sending...");
-
-  }
-
-  if (commandIs('info', msg)) {
-    var embeded = new Discord.RichEmbed()
-            .setAuthor("Hexagon", "https://tropical-wrist.000webhostapp.com/Hexagonal.png")
-            .setTitle("")
-            .addField("Information", "Hexagon (Formerly known as Music4All) is a client which can do many things. It can moderate, play music, and do some fun commands.\n h/cmd to have a look at the commands.")
-            .setFooter("Requested from " + msg.author.username);
-    msg.channel.send(embeded);
-  }
 
   if (commandIs('play', msg)) {
     args.shift();
@@ -134,13 +121,6 @@ client.on('message', async msg => {
       msg.channel.send("Nothing is being played here.");
     }
   }
-
-
-  /*
-      const ytvid = searchytdl[0].link;
-      servqueue[msg.guild.id].queue.push(ytvid);
-      msg.channel.send("Queued **" + searchytdl[0].title + "**");
-  */
 
   if (commandIs('start', msg)) {
     msg.member.voiceChannel.join().then(connection => {
