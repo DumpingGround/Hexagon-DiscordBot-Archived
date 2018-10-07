@@ -6,7 +6,8 @@ const ytdl = require("ytdl-core");
 const client = new Discord.Client();
 const prefix = "h/"
 const ytsearch = require('youtube-search');
-var servqueue = {}
+var tempramstor = {}
+var permstor = {}
 
 const options = {
   debug: false,
@@ -49,12 +50,14 @@ function formatSecs(seconds) {
 }
 
 function playmusic(connection, msg) {
-  if(!servqueue[msg.guild.id].queue[0]) {
+  if(!tempramstor[msg.guild.id].queue[0]) {
     
   }
-  const queue = servqueue[msg.guild.id];
-  queue.dispatcher = connection.playStream(ytdl(servqueue[msg.guild.id].queue[0], streamOptions));
+  const queue = tempramstor[msg.guild.id];
+  queue.dispatcher = connection.playStream(ytdl(tempramstor[msg.guild.id].queue[0], streamOptions));
+  queue.now = tempramstor[msg.guild.id].queue[0]
   queue.queue.shift();
+  queue.name.shift();
   queue.dispatcher.on("end", function() {
     if (queue.queue[0]) playmusic(connection, msg);
     else connection.disconnect();
@@ -99,9 +102,10 @@ client.on('message', async msg => {
       msg.member.voiceChannel.join().then(connection => {
       var ytvid = searchytdl[0].link;
       console.log(ytvid);
-      if(!servqueue[msg.guild.id]) {servqueue[msg.guild.id] = {queue: []}}
-      servqueue[msg.guild.id].queue.push(ytvid);
-      if (servqueue[msg.guild.id].dispatcher) {
+      if(!tempramstor[msg.guild.id]) {tempramstor[msg.guild.id] = {queue: [], name: []}}
+      tempramstor[msg.guild.id].queue.push(ytvid);
+      tempramstor[msg.guild.id].name.push(searchytdl[0].title);
+      if (tempramstor[msg.guild.id].dispatcher) {
         console.log("Queued " + ytvid);
         msg.channel.send("Queued **" + searchytdl[0].title + "**");
       } else {
@@ -113,9 +117,31 @@ client.on('message', async msg => {
     });
   }
 
+  if (commandIs('queue', msg)) {
+    if (!tempramstor[msg.guild.id]) {
+      msg.channel.send("There was an error whiles attempting to find your queue");
+      return;
+    }
+    if (!tempramstor[msg.guild.id].name) {
+      msg.channel.send("There is nothing in your queue.");
+    }
+      msg.channel.send(tempramstor[msg.guild.id].name);
+  }
+
+  if (commandIs('clearqueue', msg)) {
+    if (!tempramstor[msg.guild.id]) {
+      msg.channel.send("There was an error whiles attempting to find your queue");
+      return;
+    }
+    if(!tempramstor[msg.guild.id]) {tempramstor[msg.guild.id] = {queue: [], name: []}}
+    tempramstor[msg.guild.id] = {name: [], queue: []};
+    var i = tempramstor[msg.guild.id].queue.length
+    msg.channel.send("Your queue was cleared. Cleared: " + i + " Songs.");
+  }
+
   if (commandIs('skip', msg)) {
-    if (servqueue[msg.guild.id].dispatcher) {
-      servqueue[msg.guild.id].dispatcher.end();
+    if (tempramstor[msg.guild.id].dispatcher) {
+      tempramstor[msg.guild.id].dispatcher.end();
       msg.channel.send("Skipped!");
     } else {
       msg.channel.send("Nothing is being played here.");
