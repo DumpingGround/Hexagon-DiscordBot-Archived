@@ -60,7 +60,10 @@ function playmusic(connection, msg) {
   queue.name.shift();
   queue.dispatcher.on("end", function() {
     if (queue.queue[0]) playmusic(connection, msg);
-    else connection.disconnect();
+    else {
+      connection.disconnect();
+      queue.dispatcher = null
+    }
   })
 }
 
@@ -333,7 +336,7 @@ client.on('message', async msg => {
 
   if (commandIs('invite', msg)) {
     msg.channel.send("I sent it to you :thumbsup:");
-    msg.author.send("Wait you want to add this bot? OMG, thank you very much.\nJoin the Discord server to have the latest news on the updates: https://discord.gg/XbaqS\n\nhttps://discordapp.com/oauth2/authorize?client_id=389528187295498252&scope=bot&permissions=2146954487");
+    msg.author.send("https://discordapp.com/oauth2/authorize?client_id=389528187295498252&scope=bot&permissions=2146954487");
   }
 
   if (commandIs('getpremium', msg)) { // h/getpremium
