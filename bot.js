@@ -78,7 +78,7 @@ client.on('message', async msg => {
   
   if (commandIs('ping', msg)) {
       const m = await msg.channel.send(":ping_pong: Pinging...");
-      m.edit(`:ping_pong: **Bot** ${m.createdTimestamp - msg.createdTimestamp}ms | **API** ${Math.round(client.ping)}ms`);
+      m.edit(`:ping_pong: **Bot** ${m.createdTimestamp - msg.createdTimestamp}ms | <:discordhex:503505173788884992> **API** ${Math.round(client.ping)}ms`);
     }
 
   if (commandIs('play', msg)) {
@@ -100,7 +100,7 @@ client.on('message', async msg => {
       var ytvid = searchytdl[0].link;
       console.log(ytvid);
       if(!tempramstor[msg.guild.id]) {tempramstor[msg.guild.id] = {queue: [], name: []}}
-      tempramstor[msg.guild.id].queue.push(ytvid);
+      await tempramstor[msg.guild.id].queue.push(ytvid);
       tempramstor[msg.guild.id].name.push(searchytdl[0].title);
       if (tempramstor[msg.guild.id].dispatcher) {
         console.log("Queued " + ytvid);
@@ -144,13 +144,6 @@ client.on('message', async msg => {
       msg.channel.send("Nothing is being played here.");
     }
   }
-
-  if (commandIs('start', msg)) {
-    msg.member.voiceChannel.join().then(connection => {
-    playmusic(connection, msg);
-    });
-  }
-
   
   if (commandIs('rolldice', msg)) {
     const m = await msg.channel.send("<:rolling:497532919804461067>");
