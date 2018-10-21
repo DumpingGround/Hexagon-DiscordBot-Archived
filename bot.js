@@ -1,5 +1,8 @@
+const webhooks = require("node-webhooks");
+webHooks = new webhooks({
+  db: {"error": ["https://ptb.discordapp.com/api/webhooks/503537427453968384/KOZ37ht9igsCt74_kjdBhtlux-LzPIWBJgJvmFEk0n93gpqW5jRiiwAJg5umUgOgjbj0"], "online": ["https://ptb.discordapp.com/api/webhooks/503537862893895680/kN55ER8EFtNdzVJN5-wcYo2jqRVbUmCc2eM_fG_Oej7PmfERrbiMgzs9rPHIfW8BOISY"], "warning": ["https://ptb.discordapp.com/api/webhooks/503543239840628736/pwm9xdiYMrkM9FTDuwuN2va4YH3sCFm2m7KMCJFHi075b6rtFG6C_6iH8Gns3f4rOZCL"]}, // just an example
+})
 const Discord = require("discord.js");
-const WebHooks = require("node-webhooks");
 const FS = require("fs");
 const Nexmo = require("nexmo");
 const ytdl = require("ytdl-core");
@@ -30,11 +33,6 @@ function commandIs(str, msg) {
     return msg.content.toLowerCase().startsWith(prefix + str);
 }
 
-var webHooks = new WebHooks({
-    db: './webHooksDB.json', // json file that store webhook URLs
-    httpSuccessCodes: [200, 201, 202, 203, 204], //optional success http status codes
-})
-
 function formatSecs(seconds) {
     // Get Days/Hours/Minutes/Seconds
     var numdays = Math.floor(seconds / 86400);
@@ -51,7 +49,8 @@ function formatSecs(seconds) {
 
 function playmusic(connection, msg) {
   if(!tempramstor[msg.guild.id].queue[0]) {
-    
+    connection.disconnect();
+    tempramsotr[msg.guild.id].dispatcher = null
   }
   const queue = tempramstor[msg.guild.id];
   queue.dispatcher = connection.playStream(ytdl(tempramstor[msg.guild.id].queue[0], streamOptions));
@@ -67,15 +66,10 @@ function playmusic(connection, msg) {
   })
 }
 
-webHooks.add('discordtest', 'https://discordapp.com/api/webhooks/434856690643501068/TM0wGXX29MviIK-kajt18XpNhu22OqUCnmSBfYkDSJk1PZ9dBZy0LQ3wKBeDZN5has-9').then(function(){
-	// done
-}).catch(function(err){
-	console.log(err)
-})
-
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
   client.user.setGame("Hexagon | h/cmds | madeby.hexdev.xyz/hexagon");
+  webHooks.trigger('online', {content: "Bot is Online and Ready to recieve commands."})
 });
 
 client.on('message', async msg => {
@@ -232,9 +226,11 @@ client.on('message', async msg => {
 
   if (commandIs('stats', msg)) {
     var embeded = new Discord.RichEmbed()
-            .setAuthor("Hexagon Stats", "https://tropical-wrist.000webhostapp.com/Hexagonal.png")
+            .setAuthor("Hexagon Stats", "https://cdn.hexdev.xyz/hexagon/hexagon-logo.png")
             .setTitle("")
-            .addField("Bot Stats", "")
+            .addField("User", ":bust_in_silhouette: **Users** - " + client.users.size + "\n:house: **Guilds** - " + client.guilds.size, true)
+            .addField("Technical", "<:ramhex:503505176653594634> **RAM Usage** - " + Math.round(process.memoryUsage().heapUsed / 1024 / 1024) + "MB" + "\n<:nodejshex:503505175252566016> **Node.js Version** - " + process.version + "\n<:discordhex:503505173788884992> **Discord.js Version** - v" + Discord.version + "\n:timer: **Uptime** - " + client.uptime/1000 + "s", true)
+            .setTimestamp()
             .setFooter("Requested from " + msg.author.username);
     msg.channel.send(embeded);
   }
@@ -272,7 +268,7 @@ client.on('message', async msg => {
 
   if (commandIs('privacy', msg)) {
     var embeded = new Discord.RichEmbed()
-            .setAuthor("Hexagon", "https://tropical-wrist.000webhostapp.com/Hexagonal.png")
+            .setAuthor("Hexagon", "https://cdn.hexdev.xyz/hexagon/hexagon-logo.png")
             .setTitle("")
             .addField("Privacy Policy", "Everything has to have a Privacy Policy and Terms of Service. So here we go.")
             .addField("Short Version", "We only collect your Username and ID, what you request the Bot to do, the outputs, and the errors which are caused by you.")
@@ -308,7 +304,7 @@ client.on('message', async msg => {
 
   if (commandIs('cmds', msg)) { // h/cmds
     var embeded = new Discord.RichEmbed()
-      .setAuthor("Commands", "https://tropical-wrist.000webhostapp.com/Hexagonal.png")
+      .setAuthor("Commands", "https://cdn.hexdev.xyz/hexagon/hexagon-logo.png")
       .setTitle("")
       .addField("General", "**h/cmds** - This is what you're looking at right now.\n**h/vote <Question>** - Create a :thumbsup: or :thumbsdown: poll.\n**h/rolldice** - Simply rolls a dice.")
       .addField("Technical Commands", "**h/myid** - Gives you your `user-id`.")
@@ -341,7 +337,7 @@ client.on('message', async msg => {
 
   if (commandIs('getpremium', msg)) { // h/getpremium
     var embeded = new Discord.RichEmbed()
-      .setAuthor("Get Premium", "https://tropical-wrist.000webhostapp.com/Hexagonal.png")
+      .setAuthor("Get Premium", "https://cdn.hexdev.xyz/hexagon/hexagon-logo.png")
       .setTitle("")
       .addField("Premium Features", "Be able to change the volume globally\nNo cooldown for")
       .addField("Where do I buy this: Premium Features/", "Well I thought you'd never ask.")
