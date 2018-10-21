@@ -48,10 +48,6 @@ function formatSecs(seconds) {
 }
 
 function playmusic(connection, msg) {
-  if(!tempramstor[msg.guild.id].queue[0]) {
-    connection.disconnect();
-    tempramsotr[msg.guild.id].dispatcher = null
-  }
   const queue = tempramstor[msg.guild.id];
   queue.dispatcher = connection.playStream(ytdl(tempramstor[msg.guild.id].queue[0], streamOptions));
   queue.now = tempramstor[msg.guild.id].queue[0]
@@ -228,6 +224,45 @@ client.on('message', async msg => {
     msg.channel.send(embeded);
   }
 
+  if (commandIs('serverstats', msg)) {
+    var regionemoji;
+    if (msg.guild.region === "eu-west" || msg.guild.region === "eu-central") {
+      regionemoji = ":flag_eu:";
+    }
+    if (msg.guild.region === "japan") {
+      regionemoji = ":flag_jp:";
+    }
+    if (msg.guild.region === "sydney") {
+      regionemoji = ":flag_au:";
+    }
+    if (msg.guild.region === "us-central" || msg.guild.region === "us-east" || msg.guild.region === "us-south" || msg.guild.region === "us-west") {
+      regionemoji = ":flag_us:";
+    }
+    if (msg.guild.region === "russia") {
+      regionemoji = ":flag_ru:";
+    }
+    if (msg.guild.region === "brazil") {
+      regionemoji = ":flag_br:";
+    }
+    if (msg.guild.region === "southafrica") {
+      regionemoji = ":flag_za:";
+    }
+    if (msg.guild.region === "hongkong") {
+      regionemoji = ":flag_hk:";
+    }
+    if (msg.guild.region === "singapore") {
+      regionemoji = ":flag_sg:";
+    }
+    var embeded = new Discord.RichEmbed()
+            .setAuthor("Server Stats", msg.guild.iconURL)
+            .setTitle("")
+            .addField("General", ":bust_in_silhouette: **Users** - " + msg.guild.memberCount, true)
+            .addField("Technical", "**Server Location** - " + regionemoji + " " + msg.guild.region + "\n**Verification Level** - " + msg.guild.verificationLevel + "\n**Guild ID** - " + msg.guild.id, true)
+            .setTimestamp()
+            .setFooter("Requested from " + msg.author.username);
+    msg.channel.send(embeded);
+  }
+
   if (commandIs('text', msg)) {
     if (msg.author.id == 189400912333111297 || msg.author.id == 256551275578130433) {
       var number = args[1]
@@ -251,24 +286,40 @@ client.on('message', async msg => {
     }
   }
 
-  
+  if (commandIs('setlogs', msg)) {
 
-  if(commandIs('callmod', msg)) {
-  var user = msg.author.username
-  var userid = msg.author.id
-}
+  }
 
+  if (commandIs('setreportchannel', msg)) {
+    if (!args[1]) {
+      msg.channel.send("Your Report channel has been reset");
+    }
+    var servid = args[1].match(/\d/g);
+    console.log(servid);
+    servid = servid.join("");
+    console.log(servid);
+    if (!permstor[msg.guild.id]) {permstor[msg.guild.id] = { "reportchannel": servid}}
+    permstor[msg.guild.id].reportchannel = servid;
+    client.channels.get(servid).send("Got it, we'll send all reports to this channel :)");
+  }
 
-  if (commandIs('privacy', msg)) {
+  if (commandIs('report', msg)) {
+    if (!permstor[msg.guild.id] || !permstor[msg.guild.id].reportchannel) {
+      msg.channel.send("Report hasn't been configured for this server properly.");
+      return;
+    }
+    args.shift(2);
+    const reason = args.join(" ");
+    msg.delete();
     var embeded = new Discord.RichEmbed()
-            .setAuthor("Hexagon", "https://cdn.hexdev.xyz/hexagon/hexagon-logo.png")
-            .setTitle("")
-            .addField("Privacy Policy", "Everything has to have a Privacy Policy and Terms of Service. So here we go.")
-            .addField("Short Version", "We only collect your Username and ID, what you request the Bot to do, the outputs, and the errors which are caused by you.")
-            .addField("Long Version", "One of HexDev and his Developer's Priorities is Privacy, Security, and Preventing Suspicious User Requests, Log Leaks, Sensitive User information leaks, and others. We collect Usernames & ID's to know who owns the group, ")
-            .addField("IF YOU DO NOT AGREE TO THESE, PLEASE EITHER REMOVE THE BOT, OR DO NOT USE IT WHATSOEVER.", "Thank you for reading.")
-            .setFooter("Last updated: 21 March 2018");
-    msg.channel.send(embeded);
+      .setAuthor("Hexagon Stats", "https://cdn.hexdev.xyz/hexagon/hexagon-logo.png")
+      .setTitle("")
+      .addField("Reported By", "<@" + msg.author.id + ">", true)
+      .addField("Reported User", args[1], true)
+      .addField("Reason", reason)
+      .setTimestamp()
+      .setFooter("Requested from " + msg.author.username);
+    client.channels.get(permstor[msg.guild.id].reportchannel).send(embeded);
   }
 
 /*
