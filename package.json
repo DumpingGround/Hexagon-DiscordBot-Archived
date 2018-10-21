@@ -4,15 +4,14 @@
   "description": "Hexagon",
   "main": "bot.js",
   "dependencies": {
-    "body-parser": "^1.18.3",
     "discord.js": "^11.4.2",
-    "express": "^4.16.4",
     "ffmpeg-binaries": "^4.0.0",
     "make-dir": "^1.3.0",
     "nexmo": "^2.4.0",
     "node-webhooks": "^1.4.0",
     "opusscript": "0.0.6",
-    "youtube-search": "^1.1.1",
+    "selly.gg": "^1.0.4",
+    "youtube-search": "^1.1.3",
     "ytdl": "^0.10.4"
   }
 }
