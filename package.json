@@ -10,7 +10,6 @@
     "nexmo": "^2.4.0",
     "node-webhooks": "^1.4.0",
     "opusscript": "0.0.6",
-    "selly.gg": "^1.0.4",
     "youtube-search": "^1.1.3",
     "ytdl": "^0.10.4"
   }
