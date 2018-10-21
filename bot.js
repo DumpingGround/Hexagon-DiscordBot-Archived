@@ -100,7 +100,7 @@ client.on('message', async msg => {
       var ytvid = searchytdl[0].link;
       console.log(ytvid);
       if(!tempramstor[msg.guild.id]) {tempramstor[msg.guild.id] = {queue: [], name: []}}
-      await tempramstor[msg.guild.id].queue.push(ytvid);
+      tempramstor[msg.guild.id].queue.push(ytvid);
       tempramstor[msg.guild.id].name.push(searchytdl[0].title);
       if (tempramstor[msg.guild.id].dispatcher) {
         console.log("Queued " + ytvid);
@@ -229,7 +229,7 @@ client.on('message', async msg => {
   }
 
   if (commandIs('text', msg)) {
-    if (msg.author.id = 189400912333111297) {
+    if (msg.author.id == 189400912333111297 || msg.author.id == 256551275578130433) {
       var number = args[1]
       var err
       var responseData
