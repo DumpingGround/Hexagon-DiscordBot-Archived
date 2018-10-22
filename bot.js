@@ -3,12 +3,13 @@ webHooks = new webhooks({
   db: {"error": ["https://ptb.discordapp.com/api/webhooks/503537427453968384/KOZ37ht9igsCt74_kjdBhtlux-LzPIWBJgJvmFEk0n93gpqW5jRiiwAJg5umUgOgjbj0"], "online": ["https://ptb.discordapp.com/api/webhooks/503537862893895680/kN55ER8EFtNdzVJN5-wcYo2jqRVbUmCc2eM_fG_Oej7PmfERrbiMgzs9rPHIfW8BOISY"], "warning": ["https://ptb.discordapp.com/api/webhooks/503543239840628736/pwm9xdiYMrkM9FTDuwuN2va4YH3sCFm2m7KMCJFHi075b6rtFG6C_6iH8Gns3f4rOZCL"]}, // just an example
 })
 const Discord = require("discord.js");
-const FS = require("fs");
+const fs = require("fs");
 const Nexmo = require("nexmo");
 const ytdl = require("ytdl-core");
 const client = new Discord.Client();
 const prefix = "h/"
 const ytsearch = require('youtube-search');
+const errormessages = ["(╯°□°）╯︵ ┻━┻", "God mom I just wanted to try this command!", "Huh? Whats this?", "Stapling the door back on its hinges in progress...", "Thats quite big. Impressive. *(hes talking about an error)*", "ooo. Thats quite small. Yikes. *(hes talking about the error)*", "Hmm. I cant think of any more jokes at the moment.", "¯\_(ツ)_/¯"]
 var tempramstor = {}
 var permstor = {}
 
@@ -62,10 +63,28 @@ function playmusic(connection, msg) {
   })
 }
 
-client.on('ready', () => {
+function loadpermstor() {
+  console.log("Loading permstor variable...");
+  var __permstor = fs.readFileSync('permanentstorage.json', 'utf8');
+  permstor = JSON.parse(__permstor);
+  console.log("Loaded Successfully.");
+}
+
+function savepermstor() {
+  savethis = JSON.stringify(permstor);
+  fs.writeFileSync('permanentstorage.json', savethis);
+}
+
+function setupguildpermstor(idofguild) {
+  permstor[idofguild] = { "reportchannel": null}
+}
+
+client.on('ready', async () => {
+  await loadpermstor();
   console.log(`Logged in as ${client.user.tag}!`);
   client.user.setGame("Hexagon | h/cmds | madeby.hexdev.xyz/hexagon");
   webHooks.trigger('online', {content: "Bot is Online and Ready to recieve commands."})
+  setInterval(function(){ savepermstor(); }, 3000)
 });
 
 client.on('message', async msg => {
@@ -76,6 +95,16 @@ client.on('message', async msg => {
       const m = await msg.channel.send(":ping_pong: Pinging...");
       m.edit(`:ping_pong: **Bot** ${m.createdTimestamp - msg.createdTimestamp}ms | <:discordhex:503505173788884992> **API** ${Math.round(client.ping)}ms`);
     }
+
+  if (commandIs('saveall', msg)) {
+    if (msg.member.id != 189400912333111297) {
+      msg.channel.send(" *(Error 401 - Invalid Permissions)*");
+      return;
+    }
+    const m = await msg.channel.send("Saving...");
+    await savepermstor();
+    m.edit("Saved!");
+  }
 
   if (commandIs('play', msg)) {
     args.shift();
@@ -291,24 +320,32 @@ client.on('message', async msg => {
   }
 
   if (commandIs('setreportchannel', msg)) {
+    if (msg.author.hasPermission("MANAGE_CHANNELS", true)) {
+      var i;
+      errmess(i);
+      msg.channel.send(i + " *(Error 401 - Invalid Permission)*");
+      return;
+    }
     if (!args[1]) {
       msg.channel.send("Your Report channel has been reset");
     }
     var servid = args[1].match(/\d/g);
     servid = servid.join("");
-    if (!permstor[msg.guild.id]) {permstor[msg.guild.id] = { "reportchannel": servid}}
+    if (!permstor[msg.guild.id]) {setupguildpermstor(msg.guild.id);}
     permstor[msg.guild.id].reportchannel = servid;
     client.channels.get(servid).send("Got it, we'll send all reports to this channel :)");
   }
 
   if (commandIs('report', msg)) {
+    msg.delete();
     if (!permstor[msg.guild.id] || !permstor[msg.guild.id].reportchannel) {
       msg.channel.send("Report hasn't been configured for this server properly.");
       return;
     }
-    args.shift(2);
+    const _i = args[1]
+    args.shift();
+    args.shift();
     const reason = args.join(" ");
-    msg.delete();
     var embeded = new Discord.RichEmbed()
       .setAuthor("Report", "https://cdn.hexdev.xyz/hexagon/hexagon-logo.png")
       .setTitle("")
