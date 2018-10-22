@@ -295,9 +295,7 @@ client.on('message', async msg => {
       msg.channel.send("Your Report channel has been reset");
     }
     var servid = args[1].match(/\d/g);
-    console.log(servid);
     servid = servid.join("");
-    console.log(servid);
     if (!permstor[msg.guild.id]) {permstor[msg.guild.id] = { "reportchannel": servid}}
     permstor[msg.guild.id].reportchannel = servid;
     client.channels.get(servid).send("Got it, we'll send all reports to this channel :)");
@@ -312,7 +310,7 @@ client.on('message', async msg => {
     const reason = args.join(" ");
     msg.delete();
     var embeded = new Discord.RichEmbed()
-      .setAuthor("Hexagon Stats", "https://cdn.hexdev.xyz/hexagon/hexagon-logo.png")
+      .setAuthor("Report", "https://cdn.hexdev.xyz/hexagon/hexagon-logo.png")
       .setTitle("")
       .addField("Reported By", "<@" + msg.author.id + ">", true)
       .addField("Reported User", args[1], true)
