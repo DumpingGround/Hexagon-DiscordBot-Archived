@@ -320,9 +320,9 @@ client.on('message', async msg => {
   }
 
   if (commandIs('setreportchannel', msg)) {
-    if (msg.author.hasPermission("MANAGE_CHANNELS", true)) {
+    if (!msg.member.hasPermission("MANAGE_CHANNELS")) {
       var i;
-      errmess(i);
+      // errmess(i);
       msg.channel.send(i + " *(Error 401 - Invalid Permission)*");
       return;
     }
@@ -346,11 +346,14 @@ client.on('message', async msg => {
     args.shift();
     args.shift();
     const reason = args.join(" ");
+    if (reason == null) {
+      reason = "Not Specified.";
+    }
     var embeded = new Discord.RichEmbed()
       .setAuthor("Report", "https://cdn.hexdev.xyz/hexagon/hexagon-logo.png")
       .setTitle("")
       .addField("Reported By", "<@" + msg.author.id + ">", true)
-      .addField("Reported User", args[1], true)
+      .addField("Reported User", _i, true)
       .addField("Reason", reason)
       .setTimestamp()
       .setFooter("Requested from " + msg.author.username);
@@ -381,7 +384,7 @@ client.on('message', async msg => {
   }
 
 
-  if (commandIs('cmds', msg)) { // h/cmds
+  if (commandIs('help', msg)) { // h/cmds
     var embeded = new Discord.RichEmbed()
       .setAuthor("Commands", "https://cdn.hexdev.xyz/hexagon/hexagon-logo.png")
       .setTitle("")
