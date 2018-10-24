@@ -414,17 +414,11 @@ client.on('message', async msg => {
 
   if (commandIs('invite', msg)) {
     msg.channel.send("I sent it to you :thumbsup:");
-    msg.author.send("https://discordapp.com/oauth2/authorize?client_id=389528187295498252&scope=bot&permissions=2146954487");
-  }
-
-  if (commandIs('getpremium', msg)) { // h/getpremium
     var embeded = new Discord.RichEmbed()
-      .setAuthor("Get Premium", "https://cdn.hexdev.xyz/hexagon/hexagon-logo.png")
-      .setTitle("")
-      .addField("Premium Features", "Be able to change the volume globally\nNo cooldown for")
-      .addField("Where do I buy this: Premium Features/", "Well I thought you'd never ask.")
-      .setFooter("Premium Features");
-    msg.channel.send(embeded);
+      .setAuthor("Invite", "https://cdn.hexdev.xyz/hexagon/hexagon-logo.png")
+      .addField("Invite Link", "You can invite it by clicking [here](https://discordapp.com/oauth2/authorize?client_id=389528187295498252&scope=bot&permissions=2146954487)")
+      .setTimestamp()
+      msg.author.send(embeded);
   }
 
   if (commandIs('evaluate', msg)) { // h/evaluate <Script>
