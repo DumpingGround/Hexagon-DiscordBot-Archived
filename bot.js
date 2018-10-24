@@ -82,19 +82,60 @@ function setupguildpermstor(idofguild) {
 client.on('ready', async () => {
   await loadpermstor();
   console.log(`Logged in as ${client.user.tag}!`);
-  client.user.setGame("Hexagon | h/cmds | madeby.hexdev.xyz/hexagon");
-  webHooks.trigger('online', {content: "Bot is Online and Ready to recieve commands."})
-  setInterval(function(){ savepermstor(); }, 3000)
+  setInterval(function(){ savepermstor(); }, 3000);
+});
+
+client.on('ready', async () => {
+  client.user.setActivity("Loading Status...");
+  setInterval(function(){
+    if (permstor.maintenance == false) {
+    console.log("boop");
+    client.user.setActivity("over " + client.users.size + " People 👀", {type: "WATCHING"})
+    setTimeout(function(){client.user.setActivity("over " + client.guilds.size + " Guilds 👀", {type: "WATCHING"})}, 5000);
+    setTimeout(function(){client.user.setActivity("requests on music", {type: "LISTENING"})}, 10000);
+    setTimeout(function(){client.user.setActivity("Hexagon | h/help", {type: "PLAYING"})}, 15000);
+  } else {
+    client.user.setActivity("⚠️ MAINTENACE MODE ACTIVATED ⚠️", {type: "PLAYING"})
+  }
+  }, 25000);
 });
 
 client.on('message', async msg => {
   var args = msg.content.split(/[ ]+/);
   var slasharg = msg.content.split("/");
+
+  if (commandIs('nugget', msg)) {
+    const m = await msg.channel.send("Disabling Maintenance Mode, Please wait...");
+    permstor.maintenance = false;
+    m.edit("Successfully disabled Maintenance!");
+  }
+  if (permstor.maintenance == true) {
+    if (msg.guild.id == 189400912333111297) {
+    } else {
+      return;
+    }
+  }
   
   if (commandIs('ping', msg)) {
       const m = await msg.channel.send(":ping_pong: Pinging...");
       m.edit(`:ping_pong: **Bot** ${m.createdTimestamp - msg.createdTimestamp}ms | <:discordhex:503505173788884992> **API** ${Math.round(client.ping)}ms`);
     }
+
+  if (commandIs('maintenance', msg)) {
+    if (msg.member.id != 189400912333111297) {
+      msg.channel.send(" *(Error 401 - Invalid Permissions)*");
+      return;
+    }
+    if (permstor.maintenance == true) {
+      const m = await msg.channel.send("Disabling Maintenance Mode, Please wait...");
+      permstor.maintenance = false;
+      m.edit("Successfully disabled Maintenance!");
+    } else {
+      const m = await msg.channel.send("Enabling Maintenance Mode, Please wait...");
+      permstor.maintenance = true;
+      m.edit("Successfully enabled Maintenance!");
+    }
+  }
 
   if (commandIs('saveall', msg)) {
     if (msg.member.id != 189400912333111297) {
