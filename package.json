@@ -4,6 +4,7 @@
   "description": "Hexagon",
   "main": "shard-manage.js",
   "dependencies": {
+    "async": "^2.6.1",
     "discord.js": "^11.4.2",
     "express": "^4.16.4",
     "ffmpeg-binaries": "^4.0.0",

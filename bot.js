@@ -105,10 +105,24 @@ client.on('message', async msg => {
     m.edit("Successfully disabled Maintenance!");
   }
   if (permstor.maintenance == true) {
-    if (msg.guild.id == 189400912333111297) {
+    if (msg.author.id == 189400912333111297) {
     } else {
       return;
     }
+  }
+
+  if (commandIs('recreateshards', msg)) {
+    if (msg.member.id != 189400912333111297) {
+      msg.channel.send(" *(Error 401 - Invalid Permissions)*");
+      return;
+    }
+    const m = await msg.channel.send("⚠️ **WAIT** ⚠️\nAre you sure you want to recreate all shards? This could cause major lag?");
+    await m.react("✅");
+    await m.react("❌");
+    const filter = (reaction, user) => reaction.emoji.name === "✅" && user.id === "189400912333111297";
+    var reacted;
+    await m.awaitReactions(filter, { time: 5000 }).then(collected => reacted = collected);
+    console.log(reacted);
   }
   
   if (commandIs('ping', msg)) {
@@ -283,7 +297,7 @@ client.on('message', async msg => {
             .setAuthor("Hexagon Stats", "https://cdn.hexdev.xyz/hexagon/hexagon-logo.png")
             .setTitle("")
             .addField("User", ":bust_in_silhouette: **Users** - " + client.users.size + "\n:house: **Guilds** - " + client.guilds.size, true)
-            .addField("Technical", "<:ramhex:503505176653594634> **RAM Usage** - " + Math.round(process.memoryUsage().heapUsed / 1024 / 1024) + "MB" + "\n<:nodejshex:503505175252566016> **Node.js Version** - " + process.version + "\n<:discordhex:503505173788884992> **Discord.js Version** - v" + Discord.version + "\n:timer: **Uptime** - " + client.uptime/1000 + "s." + "\nShards Spawned - " + client.shard + "\n**Shard ID** - " + client.shard.id, true)
+            .addField("Technical", "<:ramhex:503505176653594634> **RAM Usage** - " + Math.round(process.memoryUsage().heapUsed / 1024 / 1024) + "MB" + "\n<:nodejshex:503505175252566016> **Node.js Version** - " + process.version + "\n<:discordhex:503505173788884992> **Discord.js Version** - v" + Discord.version + "\n:timer: **Uptime** - " + client.uptime/1000 + "s." + "\n**Shard ID** - " + client.shard.id, true)
             .setTimestamp()
             .setFooter("Requested from " + msg.author.username);
     msg.channel.send(embeded);
@@ -392,8 +406,17 @@ client.on('message', async msg => {
       .addField("Reported User", _i, true)
       .addField("Reason", reason)
       .setTimestamp()
-      .setFooter("Requested from " + msg.author.username);
-    client.channels.get(permstor[msg.guild.id].reportchannel).send(embeded);
+      .setFooter("Case #" + "wip");
+    client.channels.get(permstor[msg.guild.id].reportchannel).send(embeded).catch(console.error);
+    var embeded = new Discord.RichEmbed()
+      .setAuthor("Report", "https://cdn.hexdev.xyz/hexagon/hexagon-logo.png")
+      .setTitle("")
+      .setDescription("Your Report was successfully sent.")
+      .setTimestamp();
+    msg.author.send(embeded).catch(msgerr);
+    if (err) {
+      msg.author.send("There was an error whiles attempting to send your report. Contact admins and they can help fix the issue.");
+    }
   }
 
 /*
@@ -441,7 +464,7 @@ client.on('message', async msg => {
       .addField("Question from " + msg.author.username, words)
       .setFooter("Hexagon, A bot by HexDev#0001");
      var m = await msg.channel.send(embeded);
-     m.react("👍");
+     await m.react("👍");
      m.react("👎");
     } else {
       msg.channel.send("Error: Put a question.")
@@ -466,8 +489,10 @@ client.on('message', async msg => {
       var words = args.join(" ");
      if (words !== null) {
        await msg.channel.startTyping();
+       await msg.react("🤔");
        await setTimeout(function(){ try {eval(words);} catch(e) {console.error(e)} }, 500);
-       msg.channel.stopTyping();
+       await msg.channel.stopTyping();
+       await msg.clearReactions();
        msg.react("👍");
       }
     }
