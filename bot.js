@@ -77,7 +77,7 @@ function setupguildpermstor(idofguild) {
 
 client.on('ready', async () => {
   await loadpermstor();
-  console.log(`Logged in as ${client.user.tag}!`);
+  console.log(`Shard ` + client.shard.id + " Online.");
   setInterval(function(){ savepermstor(); }, 3000);
 });
 
@@ -283,7 +283,7 @@ client.on('message', async msg => {
             .setAuthor("Hexagon Stats", "https://cdn.hexdev.xyz/hexagon/hexagon-logo.png")
             .setTitle("")
             .addField("User", ":bust_in_silhouette: **Users** - " + client.users.size + "\n:house: **Guilds** - " + client.guilds.size, true)
-            .addField("Technical", "<:ramhex:503505176653594634> **RAM Usage** - " + Math.round(process.memoryUsage().heapUsed / 1024 / 1024) + "MB" + "\n<:nodejshex:503505175252566016> **Node.js Version** - " + process.version + "\n<:discordhex:503505173788884992> **Discord.js Version** - v" + Discord.version + "\n:timer: **Uptime** - " + client.uptime/1000 + "s", true)
+            .addField("Technical", "<:ramhex:503505176653594634> **RAM Usage** - " + Math.round(process.memoryUsage().heapUsed / 1024 / 1024) + "MB" + "\n<:nodejshex:503505175252566016> **Node.js Version** - " + process.version + "\n<:discordhex:503505173788884992> **Discord.js Version** - v" + Discord.version + "\n:timer: **Uptime** - " + client.uptime/1000 + "s." + "\nShards Spawned - " + client.shard + "\n**Shard ID** - " + client.shard.id, true)
             .setTimestamp()
             .setFooter("Requested from " + msg.author.username);
     msg.channel.send(embeded);
