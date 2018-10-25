@@ -2,9 +2,10 @@
   "name": "hexagon-discordbot",
   "version": "1.0.0",
   "description": "Hexagon",
-  "main": "bot.js",
+  "main": "shard-manage.js",
   "dependencies": {
     "discord.js": "^11.4.2",
+    "express": "^4.16.4",
     "ffmpeg-binaries": "^4.0.0",
     "libsodium-wrappers": "^0.7.3",
     "make-dir": "^1.3.0",
@@ -13,5 +14,19 @@
     "opusscript": "0.0.6",
     "youtube-search": "^1.1.3",
     "ytdl": "^0.10.4"
-  }
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node shard-manage.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/HexDev/Hexagon-DiscordBot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/HexDev/Hexagon-DiscordBot/issues"
+  },
+  "homepage": "https://gitlab.com/HexDev/Hexagon-DiscordBot#README"
 }

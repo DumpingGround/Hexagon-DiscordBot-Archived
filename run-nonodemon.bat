@@ -1,5 +1,5 @@
 @echo off
 title Hexagon - Bot
-node bot.js
+node shard-manage.js
 echo Process Cancelled
 pause>nul
