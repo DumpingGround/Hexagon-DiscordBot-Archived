@@ -89,7 +89,6 @@ client.on('ready', async () => {
   client.user.setActivity("Loading Status...");
   setInterval(function(){
     if (permstor.maintenance == false) {
-    console.log("boop");
     client.user.setActivity("over " + client.users.size + " People 👀", {type: "WATCHING"})
     setTimeout(function(){client.user.setActivity("over " + client.guilds.size + " Guilds 👀", {type: "WATCHING"})}, 5000);
     setTimeout(function(){client.user.setActivity("requests on music", {type: "LISTENING"})}, 10000);
