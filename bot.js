@@ -1,7 +1,3 @@
-const webhooks = require("node-webhooks");
-webHooks = new webhooks({
-  db: {"error": ["https://ptb.discordapp.com/api/webhooks/503537427453968384/KOZ37ht9igsCt74_kjdBhtlux-LzPIWBJgJvmFEk0n93gpqW5jRiiwAJg5umUgOgjbj0"], "online": ["https://ptb.discordapp.com/api/webhooks/503537862893895680/kN55ER8EFtNdzVJN5-wcYo2jqRVbUmCc2eM_fG_Oej7PmfERrbiMgzs9rPHIfW8BOISY"], "warning": ["https://ptb.discordapp.com/api/webhooks/503543239840628736/pwm9xdiYMrkM9FTDuwuN2va4YH3sCFm2m7KMCJFHi075b6rtFG6C_6iH8Gns3f4rOZCL"]}, // just an example
-})
 const Discord = require("discord.js");
 const fs = require("fs");
 const Nexmo = require("nexmo");
