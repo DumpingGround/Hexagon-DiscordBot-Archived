@@ -5,7 +5,29 @@ const ytdl = require("ytdl-core");
 const client = new Discord.Client();
 const prefix = "h/"
 const ytsearch = require('youtube-search');
+const config = require("./config.json");
 const errormessages = ["(╯°□°）╯︵ ┻━┻", "God mom I just wanted to try this command!", "Huh? Whats this?", "Stapling the door back on its hinges in progress...", "Thats quite big. Impressive. *(hes talking about an error)*", "ooo. Thats quite small. Yikes. *(hes talking about the error)*", "Hmm. I cant think of any more jokes at the moment.", "¯\_(ツ)_/¯"]
+const express = require('express'),
+  bodyParser = require('body-parser'),
+  expres = express();
+
+/*expres.use(bodyParser.json());
+
+expres.post('/api/selly', function(req, res) {
+  console.log(req.body);
+
+  res.json({
+    message: 'gotcha!'
+  });
+});
+
+var server = expres.listen(4280, function() {
+  var host = server.address().address
+  var port = server.address().port
+
+  console.log('testing')
+});
+*/
 var tempramstor = {}
 var permstor = {}
 
@@ -60,10 +82,8 @@ function playmusic(connection, msg) {
 }
 
 function loadpermstor() {
-  console.log("Loading permstor variable...");
   var __permstor = fs.readFileSync('permanentstorage.json', 'utf8');
   permstor = JSON.parse(__permstor);
-  console.log("Loaded Successfully.");
 }
 
 function savepermstor() {
@@ -76,6 +96,9 @@ function setupguildpermstor(idofguild) {
 }
 
 client.on('ready', async () => {
+  if (!permstor.maintenance) {
+    permstor.maintenance = false;
+  }
   await loadpermstor();
   console.log(`Shard ` + client.shard.id + " Online.");
   setInterval(function(){ savepermstor(); }, 3000);
@@ -381,7 +404,7 @@ client.on('message', async msg => {
     }
     var servid = args[1].match(/\d/g);
     servid = servid.join("");
-    if (!permstor[msg.guild.id]) {setupguildpermstor(msg.guild.id);}
+    if (!permstor[msg.guild.id]) {await setupguildpermstor(msg.guild.id);}
     permstor[msg.guild.id].reportchannel = servid;
     client.channels.get(servid).send("Got it, we'll send all reports to this channel :)");
   }
@@ -392,10 +415,18 @@ client.on('message', async msg => {
       msg.channel.send("Report hasn't been configured for this server properly.");
       return;
     }
-    const _i = args[1]
+    if (!msg.mentions.members) {
+      msg.author.send("You must @ the user you're wanting to report.");
+      return;
+    }
+    var i = msg.mentions.members.first();
+    if (client.users.get(i).bot) {
+      msg.author.send("You cannot tag a bot.");
+      return;
+    }
     args.shift();
     args.shift();
-    const reason = args.join(" ");
+    var reason = args.join(" ");
     if (reason == null) {
       reason = "Not Specified.";
     }
@@ -407,15 +438,16 @@ client.on('message', async msg => {
       .addField("Reason", reason)
       .setTimestamp()
       .setFooter("Case #" + "wip");
-    client.channels.get(permstor[msg.guild.id].reportchannel).send(embeded).catch(console.error);
+    client.channels.get(permstor[msg.guild.id].reportchannel).send(embeded).catch(err);
     var embeded = new Discord.RichEmbed()
       .setAuthor("Report", "https://cdn.hexdev.xyz/hexagon/hexagon-logo.png")
       .setTitle("")
       .setDescription("Your Report was successfully sent.")
       .setTimestamp();
-    msg.author.send(embeded).catch(msgerr);
+    msg.author.send(embeded).catch(err);
     if (err) {
       msg.author.send("There was an error whiles attempting to send your report. Contact admins and they can help fix the issue.");
+      return;
     }
   }
 
@@ -499,8 +531,6 @@ client.on('message', async msg => {
   }
 
 
-
-
 }); //END OF SHITE
 
-client.login('Mzg5NTI4MTg3Mjk1NDk4MjUy.DQ9QVg.v-p4d-RWMe_qcFGYOBRZJvLTMlk');
+client.login(config.token);
