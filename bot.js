@@ -1,9 +1,8 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
-const errormessages = ["(╯°□°）╯︵ ┻━┻", "God mom I just wanted to try this command!", "Huh? Whats this?", "Stapling the door back on its hinges in progress...", "Thats quite big. Impressive. *(hes talking about an error)*", "ooo. Thats quite small. Yikes. *(hes talking about the error)*", "Hmm. I cant think of any more jokes at the moment.", "¯\_(ツ)_/¯"]
+const errormessages = ["(╯°□°）╯︵ ┻━┻", "God mom I just wanted to try this command!", "Huh? Whats this?", "Stapling the door back on its hinges in progress...", "Thats quite big. Impressive. *(hes talking about an error)*", "ooo. Thats quite small. Yikes. *(hes talking about the error)*", "Hmm. I cant think of any more jokes at the moment.", "¯\_(ツ)_/¯", "You idiot, what did you do?", "（◞‸◟）We're sowwy ;-;.", "Well this is awkward.. (゜○゜)"]
 const prefix = "h/"
-var tstor = []
-var pstor = []
+var temp = []
 
 function commandIs(str, msg) {
     // Return Information + Accept Multiple Prefixes
