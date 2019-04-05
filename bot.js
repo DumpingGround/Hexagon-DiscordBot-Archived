@@ -78,5 +78,3 @@ client.on('message', async msg => {
 
 
 }); //END OF SHITE
-
-client.login('Mzg5NTI4MTg3Mjk1NDk4MjUy.DQ9QVg.v-p4d-RWMe_qcFGYOBRZJvLTMlk');
