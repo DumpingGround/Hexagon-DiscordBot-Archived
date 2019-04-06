@@ -4,7 +4,7 @@ const ytdl = require("ytdl-core-discord");
 const fs = require("fs");
 const client = new Discord.Client();
 const errormessages = ["(╯°□°）╯︵ ┻━┻", "God mom I just wanted to try this command!", "Huh? Whats this?", "Stapling the door back on its hinges in progress...", "Thats quite big. Impressive. *(hes talking about an error)*", "ooo. Thats quite small. Yikes. *(hes talking about the error)*", "Hmm. I cant think of any more jokes at the moment.", "¯\_(ツ)_/¯", "You idiot, what did you do?", "（◞‸◟）We're sowwy ;-;.", "Well this is awkward.. (゜○゜)"]
-var temp = []
+var temp = {}
 
 let configraw = fs.readFileSync('config (DO NOT OPEN).json') 
 let config = JSON.parse(configraw);
@@ -24,8 +24,19 @@ function commandIs(str, msg) {
     return msg.content.toLowerCase().startsWith(prefix + str);
 }
 
-async function play(connection, url) {
-  connection.playOpusStream(await ytdl(url));
+async function play(connection, guildid) {
+  const queue = temp[guildid];
+  queue.dispatcher = connection.playOpusStream(await ytdl(queue.queue[0], { seek: 0, volume: 0.5, filter: "audioonly" }));
+  queue.now = temp[guildid].queue[0]
+  queue.queue.shift();
+  queue.name.shift();
+  queue.dispatcher.on('end', function() {
+    if (queue.queue[0]) play(connection, guildid);
+    else {
+      connection.disconnect();
+      queue.dispatcher = null;
+    }
+  })
 }
 
 // FUNCTIONS ABOVE HERE
@@ -138,7 +149,10 @@ client.on('message', async msg => {
       embeded.setFooter("Requested from " + msg.author.username, msg.author.avatarURL);
       m.edit(embeded);
       msg.member.voiceChannel.join().then(connection => {
-        play(connection, info.items[0].webpage_url);
+        if (!temp[msg.guild.id].queue) temp[msg.guild.id] = {queue: [], name: []}
+        temp[msg.guild.id].queue.push(info.items[0].webpage_url);
+        temp[msg.guild.id].name.push(info.items[0].title);
+        play(connection, msg.guild.id);
       })
     })
   }
@@ -155,6 +169,9 @@ client.on('message', async msg => {
     msg.member.voiceChannel.leave();
   }
 
+  if (commandIs('screenshare', msg)) {
+    msg.channel.send("Discord lets Voice Channels screenshare and video chat.\nYour link to it is: " + `https://discordapp.com/channels/${msg.guild.id}/${msg.member.voiceChannel.id}`);
+  }
 
 
 
