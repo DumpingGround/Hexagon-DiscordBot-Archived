@@ -4,8 +4,20 @@ const ytdl = require("ytdl-core-discord");
 const fs = require("fs");
 const client = new Discord.Client();
 const errormessages = ["(╯°□°）╯︵ ┻━┻", "God mom I just wanted to try this command!", "Huh? Whats this?", "Stapling the door back on its hinges in progress...", "Thats quite big. Impressive. *(hes talking about an error)*", "ooo. Thats quite small. Yikes. *(hes talking about the error)*", "Hmm. I cant think of any more jokes at the moment.", "¯\_(ツ)_/¯", "You idiot, what did you do?", "（◞‸◟）We're sowwy ;-;.", "Well this is awkward.. (゜○゜)"]
-const prefix = "h/"
 var temp = []
+
+let configraw = fs.readFileSync('config (DO NOT OPEN).json') 
+let config = JSON.parse(configraw);
+
+if (config.canary == true) {
+  var prefix = '*/'
+}
+if (config.ptb == true) {
+  var prefix = 'h2/'
+}
+if (config.ptb == false && config.canary == false) {
+  var prefix = 'h/'
+}
 
 function commandIs(str, msg) {
     // Return Information + Accept Multiple Prefixes
@@ -15,9 +27,6 @@ function commandIs(str, msg) {
 async function play(connection, url) {
   connection.playOpusStream(await ytdl(url));
 }
-
-let configraw = fs.readFileSync('config (DO NOT OPEN).json') 
-let config = JSON.parse(configraw);
 
 // FUNCTIONS ABOVE HERE
 client.on('ready', () => {
