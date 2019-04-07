@@ -120,6 +120,7 @@ client.on('message', async msg => {
       return;
     }
     await msg.member.voiceChannel.join();
+    msg.channel.send("I have been summoned.");
   }
 
   if (commandIs('play', msg)) {
@@ -178,7 +179,21 @@ client.on('message', async msg => {
       msg.channel.send("You're not in the same channel as the bot.");
       return;
     } */
-    msg.member.voiceChannel.leave();
+    await msg.member.voiceChannel.leave();
+    msg.channel.send("Alright I've left.");
+  }
+
+  if (commandIs('skip', msg)) {
+    if (!msg.guild.voiceConnection) {
+      msg.channel.send("The bot isn't in a channel.");
+      return;
+    }
+    if (!temp[msg.guild.id].dispatcher) {
+      msg.channel.send("The bot isn't playing anything right now.");
+      return;
+    }
+    temp[msg.guild.id].dispatcher.end();
+    msg.channel.send("Skipped!");
   }
 
   if (commandIs('screenshare', msg)) {
