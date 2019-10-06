@@ -23,7 +23,7 @@ client.on('message', async msg => {
     var args = msg.content.split(/[ ]+/);
     if (msg.author.id == client.user.id) return;
     // start ur shite here
-    client.guilds.
+    client.guilds
 
     if (commandIs(''))
 
