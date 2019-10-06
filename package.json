@@ -18,6 +18,8 @@
   "homepage": "https://github.com/HexDevv/Hexagon-DiscordBot#readme",
   "dependencies": {
     "discord.js": "^11.5.1",
-    "opusscript": "0.0.7"
+    "node-opus": "^0.3.2",
+    "ytdl-core": "^1.0.0",
+    "ytdl-getinfo": "^1.1.0"
   }
 }
