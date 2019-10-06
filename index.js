@@ -23,9 +23,11 @@ client.on('message', async msg => {
     var args = msg.content.split(/[ ]+/);
     if (msg.author.id == client.user.id) return;
     // start ur shite here
-    client.guilds
 
-    if (commandIs(''))
+    if (commandIs('ping', msg)) {
+        const m = await msg.channel.send(":ping_pong: Pinging...");
+        m.edit(`:ping_pong: **Bot** ${m.createdTimestamp - msg.createdTimestamp}ms | **API** ${Math.round(client.ping)}ms`);
+    }
 
     if (commandIs('eval', msg)) {
         if (!msg.author.id == 189400912333111297) return;
